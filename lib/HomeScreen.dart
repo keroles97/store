@@ -5,7 +5,6 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,7 +16,7 @@ class _HomePageState extends State<HomeScreen> {
   final String url = 'http://almowqa.com/';
   WebViewController _controller;
   final Completer<WebViewController> _controllerCompleter =
-  Completer<WebViewController>();
+      Completer<WebViewController>();
 
   bool isLoading = true;
   bool isOnline = true;
@@ -30,8 +29,12 @@ class _HomePageState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Stack(
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size(0.0, 0.0),
+        child: Container(),
+      ),
+      body: Stack(
         children: [
           WillPopScope(
             onWillPop: () => _handleBack(context),
@@ -51,8 +54,7 @@ class _HomePageState extends State<HomeScreen> {
                     request.url.contains("twitter") ||
                     request.url.contains("snap") ||
                     request.url.contains("whats") ||
-                    request.url.contains("facebook")
-                ) {
+                    request.url.contains("facebook")) {
                   launch(request.url);
                   return NavigationDecision.prevent;
                 }
@@ -91,40 +93,40 @@ class _HomePageState extends State<HomeScreen> {
           ),
           isLoading
               ? Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                  margin: EdgeInsets.fromLTRB(0, 0, 0, 100),
-                  child: CircularProgressIndicator.adaptive(
-                    valueColor:
-                    new AlwaysStoppedAnimation<Color>(Colors.blue),
-                  )))
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 100),
+                      child: CircularProgressIndicator.adaptive(
+                        valueColor:
+                            new AlwaysStoppedAnimation<Color>(Colors.blue),
+                      )))
               : Stack(),
           isOnline
               ? Stack()
               : Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            color: Colors.black,
-            child: RefreshIndicator(
-              color: Colors.black,
-              onRefresh: () async {
-                print('refreshing');
-                _controller.reload();
-                return Future.delayed(Duration(seconds: 2), () {});
-              },
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                child: Container(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   color: Colors.black,
-                  alignment: Alignment.center,
-                  child: Text("تاكد من الاتصال بالانترنت تم اسحب لاسفل",
-                      style: TextStyle(color: Colors.white)),
+                  child: RefreshIndicator(
+                    color: Colors.black,
+                    onRefresh: () async {
+                      print('refreshing');
+                      _controller.reload();
+                      return Future.delayed(Duration(seconds: 2), () {});
+                    },
+                    child: SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.black,
+                        alignment: Alignment.center,
+                        child: Text("تاكد من الاتصال بالانترنت تم اسحب لاسفل",
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -152,30 +154,30 @@ class _HomePageState extends State<HomeScreen> {
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text(
-              'هل تريد اغلاق التطبيق',
-              textAlign: TextAlign.right,
-              style: TextStyle(color: Colors.black),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('لا',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color: Colors.black)),
-              ),
-              TextButton(
-                onPressed: () {
-                  SystemNavigator.pop();
-                },
-                child: Text('نعم',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(color: Colors.black)),
-              ),
-            ],
-          ));
+                title: Text(
+                  'هل تريد اغلاق التطبيق',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(color: Colors.black),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('لا',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(color: Colors.black)),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      SystemNavigator.pop();
+                    },
+                    child: Text('نعم',
+                        textAlign: TextAlign.right,
+                        style: TextStyle(color: Colors.black)),
+                  ),
+                ],
+              ));
     }
   }
 }
